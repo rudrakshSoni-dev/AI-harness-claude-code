@@ -1,0 +1,18 @@
+{
+  "name": "@harness/cli",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "harness": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "@harness/config": "workspace:*",
+    "@harness/core": "workspace:*",
+    "@harness/llm": "workspace:*",
+    "@harness/sandbox": "workspace:*",
+    "@harness/tools": "workspace:*"
+  }
+}

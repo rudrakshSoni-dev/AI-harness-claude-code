@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src"
+  },
+  "references": [
+    { "path": "../../packages/sandbox" },
+    { "path": "../../packages/config" },
+    { "path": "../../packages/tools" },
+    { "path": "../../packages/llm" },
+    { "path": "../../packages/core" }
+  ],
+  "include": ["src/**/*"]
+}

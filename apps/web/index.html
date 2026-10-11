@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Harness – Local, Honest AI Coding Agent</title>
+  <meta name="description" content="A small, local AI coding harness. Your code and your API key stay on your machine.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%20width=%22100%22%20height=%22100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="copy.js"></script>
+</head>
+<body>
+  <a href="#content" class="skip-link">Skip to content</a>
+
+  <div class="container">
+    <header>
+      <div class="brand">ai-harness</div>
+      <nav aria-label="Main Navigation">
+        <a href="#install">Install</a>
+        <a href="#usage">Usage</a>
+        <a href="#safety">Safety</a>
+        <a href="https://github.com/rudrakshSoni-dev/AI-harness-claude-code" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </nav>
+    </header>
+
+    <main id="content">
+      <!-- 2. Hero -->
+      <section class="hero" aria-labelledby="hero-title">
+        <h1 id="hero-title">Bring your own key.<br>Point it at a directory.<br>Let it code.</h1>
+        <p class="subhead">A small, local AI coding harness. Your code and your API key stay on your machine.</p>
+
+        <div class="code-block" data-label="Quick install command">
+          <div class="code-toolbar"></div>
+          <pre><code><span class="prompt-char">$</span>git clone https://github.com/rudrakshSoni-dev/AI-harness-claude-code.git harness &amp;&amp; cd harness &amp;&amp; pnpm i &amp;&amp; pnpm build</code></pre>
+        </div>
+
+        <div class="hero-actions">
+          <a href="#install" class="btn btn-primary">Get Started</a>
+          <a href="https://github.com/rudrakshSoni-dev/AI-harness-claude-code" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">View on GitHub</a>
+        </div>
+      </section>
+
+      <!-- 3. How it works -->
+      <section id="how-it-works" aria-labelledby="how-it-works-title">
+        <h2 id="how-it-works-title">How it works</h2>
+        <div class="steps-list">
+          <div class="step-card">
+            <div class="step-num">STEP 01</div>
+            <h3>Install</h3>
+            <p>Clone the repository and build the TypeScript CLI using pnpm in under two minutes.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num">STEP 02</div>
+            <h3>Add your key</h3>
+            <p>Export your API key as an environment variable or store it locally in user config with 0o600 permissions.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num">STEP 03</div>
+            <h3>Run in your project</h3>
+            <p>Point the harness at your target repository directory and tell it what task to accomplish.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Install guide -->
+      <section id="install" aria-labelledby="install-title">
+        <h2 id="install-title">Install guide</h2>
+        <p>Prerequisites: Node.js 22 LTS or newer and pnpm (run <code>corepack enable</code> or <code>npm i -g pnpm</code>).</p>
+
+        <div class="os-tabs">
+          <details open>
+            <summary>Linux</summary>
+            <div class="code-block" data-label="Linux install commands">
+              <div class="code-toolbar"></div>
+              <pre><code><span class="prompt-char">$</span>git clone https://github.com/rudrakshSoni-dev/AI-harness-claude-code.git harness
+<span class="prompt-char">$</span>cd harness
+<span class="prompt-char">$</span>pnpm install &amp;&amp; pnpm build
+<span class="prompt-char">$</span>pnpm --filter @harness/cli link --global
+<span class="prompt-char">$</span>export HARNESS_API_KEY="sk-..."
+<span class="prompt-char">$</span>harness --dir ~/projects/my-app</code></pre>
+            </div>
+          </details>
+
+          <details>
+            <summary>macOS</summary>
+            <div class="code-block" data-label="macOS install commands">
+              <div class="code-toolbar"></div>
+              <pre><code><span class="prompt-char">$</span>git clone https://github.com/rudrakshSoni-dev/AI-harness-claude-code.git harness
+<span class="prompt-char">$</span>cd harness
+<span class="prompt-char">$</span>pnpm install &amp;&amp; pnpm build
+<span class="prompt-char">$</span>pnpm --filter @harness/cli link --global
+<span class="prompt-char">$</span>export HARNESS_API_KEY="sk-..."
+<span class="prompt-char">$</span>harness --dir ~/projects/my-app</code></pre>
+            </div>
+          </details>
+
+          <details>
+            <summary>Windows (WSL)</summary>
+            <div class="code-block" data-label="Windows (WSL) install commands">
+              <div class="code-toolbar"></div>
+              <pre><code><span class="prompt-char">$</span>git clone https://github.com/rudrakshSoni-dev/AI-harness-claude-code.git harness
+<span class="prompt-char">$</span>cd harness
+<span class="prompt-char">$</span>pnpm install &amp;&amp; pnpm build
+<span class="prompt-char">$</span>pnpm --filter @harness/cli link --global
+<span class="prompt-char">$</span>export HARNESS_API_KEY="sk-..."
+<span class="prompt-char">$</span>harness --dir /mnt/c/projects/my-app</code></pre>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- 5. Usage -->
+      <section id="usage" aria-labelledby="usage-title">
+        <h2 id="usage-title">Usage</h2>
+        <p>A realistic session showing step tracing, file diff review, and explicit command approval:</p>
+
+        <div class="terminal-demo" role="region" aria-label="Terminal session demo">
+          <div class="term-line"><strong>$ harness --dir ./my-project</strong></div>
+          <div class="term-line" style="color: var(--text-dim);">Harness active in: /home/user/my-project (model: gpt-4o, maxSteps: 25)</div>
+          <div class="term-line" style="color: var(--text-dim);">Type a goal to begin. Type 'exit' to quit.</div>
+          <div class="term-line">&nbsp;</div>
+          <div class="term-line"><strong>&gt; add input validation to signup.ts</strong></div>
+          <div class="term-line"><span style="color: var(--accent);">[step 1]</span> list_dir src</div>
+          <div class="term-line"><span style="color: var(--accent);">[step 2]</span> read_file src/signup.ts</div>
+          <div class="term-line"><span style="color: var(--accent);">[step 3]</span> write_file src/signup.ts</div>
+          <div class="term-line">&nbsp;</div>
+          <div class="term-line">Proposed change to src/signup.ts:</div>
+          <div class="term-line" style="color: var(--text-dim);">@@ -12,4 +12,8 @@</div>
+          <div class="term-line"> export function validateSignup(data: SignupData) {</div>
+          <div class="term-line diff-add">+  if (!data.email || !data.email.includes("@")) {</div>
+          <div class="term-line diff-add">+    throw new Error("Invalid email address");</div>
+          <div class="term-line diff-add">+  }</div>
+          <div class="term-line diff-sub">-  return true;</div>
+          <div class="term-line diff-add">+  return { valid: true };</div>
+          <div class="term-line"> }</div>
+          <div class="term-line">&nbsp;</div>
+          <div class="term-line"><strong>Apply this change? [y/N] y</strong></div>
+          <div class="term-line">&nbsp;</div>
+          <div class="term-line" style="color: var(--accent);">[done] Added email presence and format validation to signup.ts. 3 steps, ~3.8k tokens.</div>
+        </div>
+      </section>
+
+      <!-- 6. Safety -->
+      <section id="safety" aria-labelledby="safety-title">
+        <h2 id="safety-title">Safety</h2>
+        <p>The harness is jailed to the directory you choose using canonical <code>realpath</code> path checking. Relative path traversal (<code>../</code>) and symlinks leading outside your workspace root are strictly rejected.</p>
+
+        <div class="callout-warn">
+          <strong>Notice:</strong> This is a path jail and approval policy, <strong>not a container-grade sandbox</strong>. Approved shell commands run on your host. Always run the harness inside a directory tracked by git and inspect diffs before approving changes.
+        </div>
+
+        <p>Shell commands (<code>run_cmd</code>) <strong>always</strong> require interactive confirmation. No command executes silently without your explicit approval.</p>
+      </section>
+
+      <!-- 7. FAQ -->
+      <section id="faq" aria-labelledby="faq-title">
+        <h2 id="faq-title">Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+          <h3>Where is my API key stored?</h3>
+          <p>If you use <code>HARNESS_API_KEY</code>, it stays in your terminal session memory. If you run <code>harness --setup</code>, it is stored in <code>~/.config/harness/config.json</code> with restrictive file permissions (<code>0o600</code>).</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What data gets sent to external servers?</h3>
+          <p>The harness communicates exclusively with your configured LLM endpoint via HTTPS. There is zero telemetry, zero analytics, and zero third-party tracking.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How much does it cost?</h3>
+          <p>The harness software is completely free and open source. You pay only your chosen LLM provider for the tokens consumed by your prompts and completions.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>How do I uninstall?</h3>
+          <p>Unlink the global binary (<code>pnpm unlink --global</code> or <code>npm unlink -g @harness/cli</code>) and delete the cloned directory and config folder.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div>ai-harness &bull; MIT License &bull; v0.1.0</div>
+      <div><a href="https://github.com/rudrakshSoni-dev/AI-harness-claude-code" target="_blank" rel="noopener noreferrer">GitHub</a></div>
+    </footer>
+  </div>
+</body>
+</html>
