@@ -1,17 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
   const codeBlocks = document.querySelectorAll(".code-block");
 
+  const copyIconSvg =
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+  const checkIconSvg =
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+
   codeBlocks.forEach((block) => {
     const pre = block.querySelector("pre");
     if (!pre) return;
-
-    // Use existing toolbar or create one before pre
-    let toolbar = block.querySelector(".code-toolbar");
-    if (!toolbar) {
-      toolbar = document.createElement("div");
-      toolbar.className = "code-toolbar";
-      block.insertBefore(toolbar, pre);
-    }
 
     // Determine accessible label
     let label = block.getAttribute("data-label");
@@ -28,8 +25,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const copyBtn = document.createElement("button");
     copyBtn.className = "copy-btn";
     copyBtn.type = "button";
-    copyBtn.textContent = "Copy";
     copyBtn.setAttribute("aria-label", `Copy ${label}`);
+    copyBtn.setAttribute("title", `Copy ${label}`);
+    copyBtn.innerHTML = `
+      <span class="icon-wrap" aria-hidden="true">${copyIconSvg}</span>
+      <span class="sr-only" aria-live="polite"></span>
+    `;
 
     copyBtn.addEventListener("click", async () => {
       // Extract code text excluding prompt characters ($)
@@ -37,32 +38,35 @@ document.addEventListener("DOMContentLoaded", () => {
       const promptSpans = clone.querySelectorAll(".prompt-char");
       promptSpans.forEach((span) => span.remove());
 
-      const raw = clone.innerText || clone.textContent || "";
+      const raw = clone.textContent || "";
       const lines = raw.split(/\r?\n/);
       const cleanLines = lines
         .map((line) => line.replace(/^\$\s*/, "").trimEnd())
         .filter((line, index, arr) => {
-          if (index === arr.length - 1 && line === "") return false;
+          if (index === arr.length - 1 && line.trim() === "") return false;
           return true;
         });
 
       const textToCopy = cleanLines.join("\n");
 
       const success = await copyText(textToCopy);
+      const iconWrap = copyBtn.querySelector(".icon-wrap");
+      const srAnnounce = copyBtn.querySelector(".sr-only");
+
       if (success) {
-        copyBtn.textContent = "Copied";
+        if (iconWrap) iconWrap.innerHTML = checkIconSvg;
+        if (srAnnounce) srAnnounce.textContent = "Copied";
+        copyBtn.setAttribute("title", "Copied");
+
         setTimeout(() => {
-          copyBtn.textContent = "Copy";
-        }, 2000);
-      } else {
-        copyBtn.textContent = "Failed";
-        setTimeout(() => {
-          copyBtn.textContent = "Copy";
+          if (iconWrap) iconWrap.innerHTML = copyIconSvg;
+          if (srAnnounce) srAnnounce.textContent = "";
+          copyBtn.setAttribute("title", `Copy ${label}`);
         }, 2000);
       }
     });
 
-    toolbar.appendChild(copyBtn);
+    block.appendChild(copyBtn);
   });
 });
 

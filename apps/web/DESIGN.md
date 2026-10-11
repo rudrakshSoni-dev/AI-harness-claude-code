@@ -14,9 +14,9 @@ The page is **documentation with a headline on top**, not a marketing site. If a
 ## 2. Constraints
 
 - Static files only: `index.html`, `style.css`, optional `copy.js`.
-- No framework, no build step, no bundler, no web fonts, no external requests.
+- No framework, no build step, no bundler, self-hosted fonts only, no external requests.
 - Works with JavaScript disabled. JS only enables the copy buttons.
-- Total page weight under 50 KB.
+- Total page weight under 100 KB (self-hosted fonts included).
 - Hostable on any static host (GitHub Pages, Netlify, Cloudflare Pages).
 
 ## 3. Page structure
@@ -61,25 +61,34 @@ Terminal-flavored and quiet. It should look like good documentation, closer to a
   --border:    #262d36;
   --text:      #e6e9ee;
   --text-dim:  #9aa4b2;
-  --accent:    #5eead4;
+  --accent:    #fb923c;
+  --on-accent: #0e1116;
+  --icon:      #ffffff;
   --warn:      #fbbf24;
   --radius:    8px;
   --measure:   720px;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }
 @media (prefers-color-scheme: light) {
   :root {
     --bg: #ffffff;  --surface: #f5f7fa;  --border: #dde2e8;
-    --text: #12161c; --text-dim: #5a6472; --accent: #0f766e; --warn: #b45309;
+    --text: #12161c; --text-dim: #5a6472; --accent: #c2410c; --on-accent: #ffffff; --icon: var(--text); --warn: #b45309;
   }
 }
 ```
 
+Text contrast is at least 4.5:1 in both themes: accent text on background is 8.36:1 (dark) and 5.18:1 (light); button text (`--on-accent`) on accent fill is 8.36:1 (dark) and 5.18:1 (light).
+
 Accent is used for exactly three things: links, the copy button, and focus rings. Nothing else is colored except the warning callout.
 
 ### Typography
-- System font stacks only, no downloads.
-- Headings and code: `ui-monospace, "SF Mono", Menlo, Consolas, monospace`
-- Body: `system-ui, -apple-system, "Segoe UI", sans-serif`
+- Self-hosted fonts only (IBM Plex Sans and IBM Plex Mono), no external requests or CDNs.
+- Exactly three Latin-subset WOFF2 files: IBM Plex Sans 400, IBM Plex Sans 600, IBM Plex Mono 500.
+- Headings (h1-h3), code, pre, buttons, and terminal demo: `var(--font-mono)` (`"IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace`).
+- Body text: `var(--font-body)` (`"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif`).
+- Applied strictly via custom property variables `--font-body` and `--font-mono`.
+- Preload IBM Plex Mono in `<head>`. OFL license in `apps/web/fonts/LICENSE.txt`.
 - Scale: 16px base body, 1.6 line height. h1 40px, h2 24px, h3 18px. Code 14px.
 
 ### Layout
@@ -91,10 +100,12 @@ Accent is used for exactly three things: links, the copy button, and focus rings
 ## 6. Components
 
 **Code block**
-- Surface background, 1px border, 8px radius, `16px` padding.
-- Horizontal scroll on overflow, never wrap commands.
-- Copy button top-right: text label "Copy" that changes to "Copied" for 2 seconds.
-- Shell prompt `$` is rendered but excluded from the copied text.
+- Surface background, 1px border, 8px radius.
+- Wrapping instead of horizontal scroll (`white-space: pre-wrap; overflow-wrap: anywhere; word-break: normal;`).
+- `<pre>` has `padding: 16px 52px 16px 32px` (right padding clears the overlay icon) and hanging indent for continuation lines (`text-indent: -16px each-line`).
+- Copy button overlays top-right corner (`position: absolute; top: 8px; right: 8px;`) taking zero layout space (no toolbar row).
+- Icon-only button: inline 16x16 SVG (two overlapping rounded squares, stroke-based), swapping to a checkmark for 2 seconds on success. Transparent background with subtle hover/focus highlight. Accessible 44x44px clickable area via `::before`.
+- Shell prompt `$` is rendered, non-selectable (`user-select: none`), and excluded from the copied text.
 
 **OS tabs (Install guide)**
 - Implemented without JS using `<details>` elements or radio-input tabs.
@@ -103,21 +114,21 @@ Accent is used for exactly three things: links, the copy button, and focus rings
 **Terminal demo (Usage)**
 - A static styled block, not an animation or video.
 - Shows: the goal typed, three tool-step lines, a diff with `+`/`-` lines, the approval prompt, and the closing summary with step count and token estimate.
-- Diff additions use the accent color, removals use the dim text color. Never rely on color alone: keep the `+` and `-` characters.
+- Wrapping instead of horizontal scroll. Diff additions use the accent color, removals use the dim text color. Never rely on color alone: keep the `+` and `-` characters.
 
 **Warning callout (Safety)**
 - Left border in `--warn`, surface background.
 - Used once, for the "not a container-grade sandbox" statement.
 
 **Buttons**
-- Two styles only: primary (accent fill, used for Copy and GitHub) and plain text links.
+- Two styles only: primary (accent fill, used for Get Started and GitHub), icon button (transparent overlay with 44x44px hit area for Copy), and plain text links.
 - Minimum tap target 44x44px.
 
 ## 7. Responsive behavior
 
 - Single breakpoint at `640px`.
 - Below it: steps stack, header links collapse to inline text, hero headline drops to 32px.
-- The page body must never scroll horizontally. Wide content (code, diffs) scrolls inside its own container.
+- The page body must never scroll horizontally. Wide content (code, diffs) wraps onto continuation lines so nothing scrolls horizontally.
 
 ## 8. Accessibility
 
@@ -141,8 +152,8 @@ Accent is used for exactly three things: links, the copy button, and focus rings
 
 | Metric | Target |
 |---|---|
-| Total transfer | < 50 KB |
-| Requests | ≤ 3 (HTML, CSS, JS) |
+| Total transfer | < 100 KB (increased from 50 KB to accommodate self-hosted WOFF2 font files) |
+| Requests | ≤ 6 (HTML, CSS, JS, and 3 self-hosted font files) |
 | Largest Contentful Paint | < 1s on a mid-range phone |
 | Layout shift | 0 (no late-loading fonts or images) |
 
